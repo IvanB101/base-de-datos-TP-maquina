@@ -41,6 +41,7 @@ public class InputPane extends javax.swing.JPanel {
     }
     
     private void changePane(JPanel jPanel) {
+        Contenedor.setLayout(new java.awt.CardLayout());
         Contenedor.removeAll();
         Contenedor.add(jPanel);
         Contenedor.revalidate();
@@ -61,6 +62,11 @@ public class InputPane extends javax.swing.JPanel {
         insertPlatoButtonP = new javax.swing.JPanel();
         insertPlatoButtonL = new javax.swing.JLabel();
         Contenedor = new javax.swing.JPanel();
+        insertButtonL2 = new javax.swing.JLabel();
+
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         barraLateral.setBackground(new java.awt.Color(31, 115, 202));
         barraLateral.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -102,44 +108,19 @@ public class InputPane extends javax.swing.JPanel {
 
         barraLateral.add(insertPlatoButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 50, -1));
 
+        jPanel5.add(barraLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 510));
+
         Contenedor.setBackground(new java.awt.Color(255, 255, 255));
-        Contenedor.setLayout(new java.awt.CardLayout());
+        Contenedor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(barraLateral, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(Contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(barraLateral, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(Contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        insertButtonL2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        insertButtonL2.setForeground(new java.awt.Color(51, 51, 51));
+        insertButtonL2.setText("Seleccione el tipo de dato que desea cargar");
+        Contenedor.add(insertButtonL2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 900, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 510, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        jPanel5.add(Contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 650, 510));
+
+        add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void insertPlatoButtonPMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertPlatoButtonPMouseEntered
@@ -160,6 +141,7 @@ public class InputPane extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Contenedor;
     private javax.swing.JPanel barraLateral;
+    private javax.swing.JLabel insertButtonL2;
     private javax.swing.JLabel insertPlatoButtonL;
     private javax.swing.JPanel insertPlatoButtonP;
     private javax.swing.JPanel jPanel5;

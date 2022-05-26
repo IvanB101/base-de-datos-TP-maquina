@@ -10,14 +10,27 @@ import com.mycompany.tpmaquianasql.Controler.MesasData;
 import com.mycompany.tpmaquianasql.Controler.MozosData;
 import com.mycompany.tpmaquianasql.Controler.PlatosData;
 import com.mycompany.tpmaquianasql.Controler.Se_ConsumeData;
+import com.mycompany.tpmaquianasql.View.Eliminar.DeletePane;
+import com.mycompany.tpmaquianasql.View.Tablas.QueryPane;
+import com.mycompany.tpmaquianasql.View.Tablas.TablePane;
 import com.mycompany.tpmaquianasql.View.ingresar.InputPane;
 import java.awt.Color;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -36,6 +49,7 @@ public class Frame extends javax.swing.JFrame {
     private MesasData mesasData;
     private PlatosData platosData;
     private Se_ConsumeData se_ConsumeData;
+    private Conexion conexion;
 
     private Color mainButtonFontColor = new Color(187, 187, 186);
     private Color mainButtonFontColorOnHover = new Color(255, 255, 255);
@@ -48,7 +62,7 @@ public class Frame extends javax.swing.JFrame {
         initComponents();
 
         // Parametros de la conexion
-        Conexion conexion = new Conexion(DB_NAME, DB_URL, DB_USER, DB_PWD);
+        this.conexion = new Conexion(DB_NAME, DB_URL, DB_USER, DB_PWD);
 
         try {
             // Conexion con la base de datos
@@ -64,14 +78,53 @@ public class Frame extends javax.swing.JFrame {
         this.platosData = new PlatosData(conexion);
         this.se_ConsumeData = new Se_ConsumeData(conexion);
 
-        firstEjecutionActions();
+        //firstEjecutionActions(); //TODO
     }
 
     private void firstEjecutionActions() {
-        //TODO
+        File file = new File("src/main/java/com/mycompany/tpmaquianasql/Insert/Inserta_Datos.txt");
+        String instruccion;
+
+        // Control para realizar las insersiones
+        if (!(file.exists()))
+            return;
+
+        try {
+            Connection con = conexion.getConexion();
+            Statement query = con.createStatement();
+
+            InputStream fis = new FileInputStream("src/main/java/com/mycompany/tpmaquianasql/Insert/Inserta_Datos.txt");
+            InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
+            BufferedReader br = new BufferedReader(isr);
+
+            // Ejecucion de las sentencias del archivo Inserta_Datos, en el archivo tambien
+            // se encuentran las demás sentencias solicitadas para la primera ejecucion del
+            // programa
+            while ((instruccion = br.readLine()) != null) {
+                query.execute(instruccion);
+            }
+
+            br.close();
+
+            // Eliminacion el archivo con las instrucciones para que no se vuelva a ejecutar
+            // file.delete(); //TODO sacar comentario
+        } catch (FileNotFoundException e) {
+            // Este control es realizado antes del try
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Ha ocurrido un error con la lectura del archivo");
+        } catch (SQLException e) {
+            switch (e.getErrorCode()) {
+                default:
+                    JOptionPane.showMessageDialog(null,
+                            "Error SQL, codigo: " + e.getErrorCode() + "Excepcion: " + e.getMessage());
+            }
+        } finally {
+            JOptionPane.showMessageDialog(null, "Se han realizado las instrucciones de la primera ejecucion con éxito");
+        }
     }
 
     private void changePane(JPanel jPanel) {
+        Contenedor.setLayout(new java.awt.CardLayout());
         Contenedor.removeAll();
         Contenedor.add(jPanel);
         Contenedor.revalidate();
@@ -88,7 +141,8 @@ public class Frame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         contenedorPrincipal = new javax.swing.JPanel();
@@ -106,6 +160,8 @@ public class Frame extends javax.swing.JFrame {
         closeButtonL = new javax.swing.JLabel();
         Contenedor = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        insertButtonL1 = new javax.swing.JLabel();
+        insertButtonL2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -137,9 +193,11 @@ public class Frame extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 insertButtonPMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 insertButtonPMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 insertButtonPMouseExited(evt);
             }
@@ -147,34 +205,37 @@ public class Frame extends javax.swing.JFrame {
 
         insertButtonL.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         insertButtonL.setForeground(new java.awt.Color(187, 187, 186));
-        insertButtonL.setText("Ingresar");
+        insertButtonL.setText("Cargar");
 
         javax.swing.GroupLayout insertButtonPLayout = new javax.swing.GroupLayout(insertButtonP);
         insertButtonP.setLayout(insertButtonPLayout);
         insertButtonPLayout.setHorizontalGroup(
-            insertButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(insertButtonPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(insertButtonL)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                insertButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(insertButtonPLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(insertButtonL)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         insertButtonPLayout.setVerticalGroup(
-            insertButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(insertButtonPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(insertButtonL)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                insertButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(insertButtonPLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(insertButtonL)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-        MenuBar.add(insertButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 70, -1, -1));
+        MenuBar.add(insertButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 70, -1, -1));
 
         deleteButtonP.setBackground(new java.awt.Color(18, 33, 69));
         deleteButtonP.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         deleteButtonP.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         deleteButtonP.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteButtonPMouseClicked(evt);
+            }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 deleteButtonPMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 deleteButtonPMouseExited(evt);
             }
@@ -187,29 +248,34 @@ public class Frame extends javax.swing.JFrame {
         javax.swing.GroupLayout deleteButtonPLayout = new javax.swing.GroupLayout(deleteButtonP);
         deleteButtonP.setLayout(deleteButtonPLayout);
         deleteButtonPLayout.setHorizontalGroup(
-            deleteButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, deleteButtonPLayout.createSequentialGroup()
-                .addContainerGap(7, Short.MAX_VALUE)
-                .addComponent(deleteButtonL)
-                .addContainerGap())
-        );
+                deleteButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                deleteButtonPLayout.createSequentialGroup()
+                                        .addContainerGap(7, Short.MAX_VALUE)
+                                        .addComponent(deleteButtonL)
+                                        .addContainerGap()));
         deleteButtonPLayout.setVerticalGroup(
-            deleteButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(deleteButtonPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(deleteButtonL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+                deleteButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(deleteButtonPLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(deleteButtonL, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap()));
 
-        MenuBar.add(deleteButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 70, -1, -1));
+        MenuBar.add(deleteButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, -1, -1));
 
         tablesButtonP.setBackground(new java.awt.Color(18, 33, 69));
         tablesButtonP.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tablesButtonP.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         tablesButtonP.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablesButtonPMouseClicked(evt);
+            }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 tablesButtonPMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 tablesButtonPMouseExited(evt);
             }
@@ -222,29 +288,32 @@ public class Frame extends javax.swing.JFrame {
         javax.swing.GroupLayout tablesButtonPLayout = new javax.swing.GroupLayout(tablesButtonP);
         tablesButtonP.setLayout(tablesButtonPLayout);
         tablesButtonPLayout.setHorizontalGroup(
-            tablesButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tablesButtonPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tablesButtonL)
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
+                tablesButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(tablesButtonPLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(tablesButtonL)
+                                .addContainerGap(9, Short.MAX_VALUE)));
         tablesButtonPLayout.setVerticalGroup(
-            tablesButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tablesButtonPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tablesButtonL)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                tablesButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(tablesButtonPLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(tablesButtonL)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-        MenuBar.add(tablesButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 70, -1, -1));
+        MenuBar.add(tablesButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 70, -1));
 
         queryButtonP.setBackground(new java.awt.Color(18, 33, 69));
         queryButtonP.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         queryButtonP.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         queryButtonP.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                queryButtonPMouseClicked(evt);
+            }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 queryButtonPMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 queryButtonPMouseExited(evt);
             }
@@ -257,21 +326,20 @@ public class Frame extends javax.swing.JFrame {
         javax.swing.GroupLayout queryButtonPLayout = new javax.swing.GroupLayout(queryButtonP);
         queryButtonP.setLayout(queryButtonPLayout);
         queryButtonPLayout.setHorizontalGroup(
-            queryButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(queryButtonPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(queryButtonL)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                queryButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(queryButtonPLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(queryButtonL)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         queryButtonPLayout.setVerticalGroup(
-            queryButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(queryButtonPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(queryButtonL)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                queryButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(queryButtonPLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(queryButtonL, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap()));
 
-        MenuBar.add(queryButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 70, -1, -1));
+        MenuBar.add(queryButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 70, -1, -1));
 
         closeButtonP.setBackground(new java.awt.Color(18, 33, 69));
         closeButtonP.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -279,9 +347,11 @@ public class Frame extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 closeButtonPMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 closeButtonPMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 closeButtonPMouseExited(evt);
             }
@@ -294,75 +364,115 @@ public class Frame extends javax.swing.JFrame {
         javax.swing.GroupLayout closeButtonPLayout = new javax.swing.GroupLayout(closeButtonP);
         closeButtonP.setLayout(closeButtonPLayout);
         closeButtonPLayout.setHorizontalGroup(
-            closeButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(closeButtonPLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(closeButtonL))
-        );
+                closeButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(closeButtonPLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(closeButtonL)));
         closeButtonPLayout.setVerticalGroup(
-            closeButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(closeButtonL, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+                closeButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(closeButtonL, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
+                                javax.swing.GroupLayout.PREFERRED_SIZE));
 
         MenuBar.add(closeButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 0, 50, 50));
 
-        Contenedor.setLayout(new java.awt.CardLayout());
+        Contenedor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setPreferredSize(new java.awt.Dimension(900, 510));
 
+        insertButtonL1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        insertButtonL1.setForeground(new java.awt.Color(51, 51, 51));
+        insertButtonL1.setText("Bienvenido a la base de datos del Restó del Freaky");
+
+        insertButtonL2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        insertButtonL2.setForeground(new java.awt.Color(51, 51, 51));
+        insertButtonL2.setText("Seleccione la operación que desea realizar");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 900, Short.MAX_VALUE)
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(233, 233, 233)
+                                .addGroup(jPanel6Layout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(insertButtonL1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(insertButtonL2, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap(256, Short.MAX_VALUE)));
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 510, Short.MAX_VALUE)
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(72, 72, 72)
+                                .addComponent(insertButtonL1)
+                                .addGap(18, 18, 18)
+                                .addComponent(insertButtonL2)
+                                .addContainerGap(372, Short.MAX_VALUE)));
 
-        Contenedor.add(jPanel6, "card3");
+        Contenedor.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         javax.swing.GroupLayout contenedorPrincipalLayout = new javax.swing.GroupLayout(contenedorPrincipal);
         contenedorPrincipal.setLayout(contenedorPrincipalLayout);
         contenedorPrincipalLayout.setHorizontalGroup(
-            contenedorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MenuBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(Contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+                contenedorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(MenuBar, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Contenedor, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE));
         contenedorPrincipalLayout.setVerticalGroup(
-            contenedorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenedorPrincipalLayout.createSequentialGroup()
-                .addComponent(MenuBar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(Contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                contenedorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(contenedorPrincipalLayout.createSequentialGroup()
+                                .addComponent(MenuBar, javax.swing.GroupLayout.PREFERRED_SIZE, 130,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(Contenedor, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 900, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(contenedorPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 900, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(contenedorPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 640, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(contenedorPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 640, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(contenedorPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void deleteButtonPMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_deleteButtonPMouseClicked
+        DeletePane deletePane = new DeletePane(consumosData, mesasData, mozosData, platosData, se_ConsumeData);
+
+        changePane(deletePane);
+    }// GEN-LAST:event_deleteButtonPMouseClicked
+
+    private void tablesButtonPMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tablesButtonPMouseClicked
+        TablePane tablePane = new TablePane(consumosData, mesasData, mozosData, platosData, se_ConsumeData);
+
+        changePane(tablePane);
+    }// GEN-LAST:event_tablesButtonPMouseClicked
+
+    private void queryButtonPMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_queryButtonPMouseClicked
+        QueryPane panel = new QueryPane(conexion);
+
+        changePane(panel);
+    }// GEN-LAST:event_queryButtonPMouseClicked
 
     private void queryButtonPMouseExited(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_queryButtonPMouseExited
         queryButtonL.setForeground(mainButtonFontColor);
@@ -470,6 +580,8 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JLabel deleteButtonL;
     private javax.swing.JPanel deleteButtonP;
     private javax.swing.JLabel insertButtonL;
+    private javax.swing.JLabel insertButtonL1;
+    private javax.swing.JLabel insertButtonL2;
     private javax.swing.JPanel insertButtonP;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JLabel queryButtonL;
