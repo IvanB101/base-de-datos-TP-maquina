@@ -132,9 +132,7 @@ public class InputPane extends javax.swing.JPanel {
     }//GEN-LAST:event_insertPlatoButtonPMouseExited
 
     private void insertPlatoButtonPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertPlatoButtonPMouseClicked
-        PlatoPane platoPane = new PlatoPane(platosData);
-        
-        changePane(platoPane);
+        changePane(new PlatoPane(platosData));
     }//GEN-LAST:event_insertPlatoButtonPMouseClicked
 
 

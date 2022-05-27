@@ -120,9 +120,7 @@ public class DeletePane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void insertPlatoButtonPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertPlatoButtonPMouseClicked
-        MozoPane mozoPane = new MozoPane(mozosData);
-                
-        changePane(mozoPane);
+        changePane(new MozoPane(mozosData));
     }//GEN-LAST:event_insertPlatoButtonPMouseClicked
 
     private void insertPlatoButtonPMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertPlatoButtonPMouseEntered

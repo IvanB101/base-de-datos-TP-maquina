@@ -158,9 +158,7 @@ public class TablePane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mozosTableButtonPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mozosTableButtonPMouseClicked
-        GeneralTablePane table = new GeneralTablePane(mozosData.getMozosTable());
-        
-        changePane(table);
+        changePane(new GeneralTablePane(mozosData.getMozosTable()));
     }//GEN-LAST:event_mozosTableButtonPMouseClicked
 
     private void mozosTableButtonPMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mozosTableButtonPMouseEntered
@@ -172,9 +170,7 @@ public class TablePane extends javax.swing.JPanel {
     }//GEN-LAST:event_mozosTableButtonPMouseExited
 
     private void platosTableButtonPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_platosTableButtonPMouseClicked
-        GeneralTablePane table = new GeneralTablePane(platosData.getPlatosTable());
-        
-        changePane(table);
+        changePane(new GeneralTablePane(platosData.getPlatosTable()));
     }//GEN-LAST:event_platosTableButtonPMouseClicked
 
     private void platosTableButtonPMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_platosTableButtonPMouseEntered

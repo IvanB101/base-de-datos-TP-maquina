@@ -11,7 +11,7 @@ import com.mycompany.tpmaquianasql.Controler.MozosData;
 import com.mycompany.tpmaquianasql.Controler.PlatosData;
 import com.mycompany.tpmaquianasql.Controler.Se_ConsumeData;
 import com.mycompany.tpmaquianasql.View.Eliminar.DeletePane;
-import com.mycompany.tpmaquianasql.View.Tablas.QueryPane;
+import com.mycompany.tpmaquianasql.View.Consultas.QueryPane;
 import com.mycompany.tpmaquianasql.View.Tablas.TablePane;
 import com.mycompany.tpmaquianasql.View.ingresar.InputPane;
 import java.awt.Color;
@@ -457,21 +457,15 @@ public class Frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void deleteButtonPMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_deleteButtonPMouseClicked
-        DeletePane deletePane = new DeletePane(consumosData, mesasData, mozosData, platosData, se_ConsumeData);
-
-        changePane(deletePane);
+        changePane(new DeletePane(consumosData, mesasData, mozosData, platosData, se_ConsumeData));
     }// GEN-LAST:event_deleteButtonPMouseClicked
 
     private void tablesButtonPMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tablesButtonPMouseClicked
-        TablePane tablePane = new TablePane(consumosData, mesasData, mozosData, platosData, se_ConsumeData);
-
-        changePane(tablePane);
+        changePane(new TablePane(consumosData, mesasData, mozosData, platosData, se_ConsumeData));
     }// GEN-LAST:event_tablesButtonPMouseClicked
 
     private void queryButtonPMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_queryButtonPMouseClicked
-        QueryPane panel = new QueryPane(conexion);
-
-        changePane(panel);
+        changePane(new QueryPane(conexion));
     }// GEN-LAST:event_queryButtonPMouseClicked
 
     private void queryButtonPMouseExited(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_queryButtonPMouseExited
@@ -531,9 +525,7 @@ public class Frame extends javax.swing.JFrame {
     }// GEN-LAST:event_closeButtonPMouseClicked
 
     private void insertButtonPMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_insertButtonPMouseClicked
-        InputPane inputPane = new InputPane(consumosData, mesasData, mozosData, platosData, se_ConsumeData);
-
-        changePane(inputPane);
+        changePane(new InputPane(consumosData, mesasData, mozosData, platosData, se_ConsumeData));
     }// GEN-LAST:event_insertButtonPMouseClicked
 
     /**

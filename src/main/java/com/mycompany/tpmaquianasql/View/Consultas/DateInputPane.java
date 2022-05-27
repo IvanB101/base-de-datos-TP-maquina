@@ -2,13 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.mycompany.tpmaquianasql.View.Tablas;
+package com.mycompany.tpmaquianasql.View.Consultas;
 
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import com.mycompany.tpmaquianasql.Controler.Conexion;
+import com.mycompany.tpmaquianasql.util.Tabla;
 
 /**
  *
@@ -31,6 +40,14 @@ public class DateInputPane extends javax.swing.JPanel {
         this.conexion = conexion;
     }
 
+    private void changePane(JPanel jPanel) {
+        Contenedor.setLayout(new java.awt.CardLayout());
+        Contenedor.removeAll();
+        Contenedor.add(jPanel);
+        Contenedor.revalidate();
+        Contenedor.repaint();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,7 +55,8 @@ public class DateInputPane extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         Contenedor = new javax.swing.JPanel();
@@ -74,6 +92,7 @@ public class DateInputPane extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 dia1FieldFocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 dia1FieldFocusLost(evt);
             }
@@ -99,6 +118,7 @@ public class DateInputPane extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 mes1FieldFocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 mes1FieldFocusLost(evt);
             }
@@ -119,6 +139,7 @@ public class DateInputPane extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 anio1FieldFocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 anio1FieldFocusLost(evt);
             }
@@ -144,6 +165,7 @@ public class DateInputPane extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 dia2FieldFocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 dia2FieldFocusLost(evt);
             }
@@ -169,6 +191,7 @@ public class DateInputPane extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 mes2FieldFocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 mes2FieldFocusLost(evt);
             }
@@ -189,6 +212,7 @@ public class DateInputPane extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 anio2FieldFocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 anio2FieldFocusLost(evt);
             }
@@ -207,9 +231,11 @@ public class DateInputPane extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 queryButtonPMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 queryButtonPMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 queryButtonPMouseExited(evt);
             }
@@ -223,19 +249,17 @@ public class DateInputPane extends javax.swing.JPanel {
         javax.swing.GroupLayout queryButtonPLayout = new javax.swing.GroupLayout(queryButtonP);
         queryButtonP.setLayout(queryButtonPLayout);
         queryButtonPLayout.setHorizontalGroup(
-            queryButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, queryButtonPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(queryButtonL, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+                queryButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, queryButtonPLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(queryButtonL, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                                .addContainerGap()));
         queryButtonPLayout.setVerticalGroup(
-            queryButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, queryButtonPLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(queryButtonL)
-                .addContainerGap())
-        );
+                queryButtonPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, queryButtonPLayout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(queryButtonL)
+                                .addContainerGap()));
 
         Contenedor.add(queryButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 90, -1));
 
@@ -378,7 +402,7 @@ public class DateInputPane extends javax.swing.JPanel {
         queryButtonP.requestFocus();
 
         String diaTemp = dia1Field.getText(), mesTemp = mes1Field.getText(), anioTemp = anio1Field.getText();
-        LocalDate fechaInicio, fechaFin;
+        LocalDate fechaInicio = null, fechaFin = null;
         boolean correcto = true;
 
         if (diaTemp.equals("Día") || mesTemp.equals("Mes") || anioTemp.equals("Año")) {
@@ -387,8 +411,8 @@ public class DateInputPane extends javax.swing.JPanel {
             correcto = false;
         } else {
             try {
-                fechaInicio = LocalDate.of(Integer.parseInt(diaTemp), Integer.parseInt(mesTemp),
-                        Integer.parseInt(anioTemp));
+                fechaInicio = LocalDate.of(Integer.parseInt(anioTemp), Integer.parseInt(mesTemp),
+                        Integer.parseInt(diaTemp));
                 errMsg1.setVisible(false);
             } catch (NumberFormatException e) {
                 errMsg1.setText("Deben ser enteros");
@@ -411,8 +435,8 @@ public class DateInputPane extends javax.swing.JPanel {
             correcto = false;
         } else {
             try {
-                fechaInicio = LocalDate.of(Integer.parseInt(diaTemp), Integer.parseInt(mesTemp),
-                        Integer.parseInt(anioTemp));
+                fechaFin = LocalDate.of(Integer.parseInt(anioTemp), Integer.parseInt(mesTemp),
+                        Integer.parseInt(diaTemp));
                 errMsg2.setVisible(false);
             } catch (NumberFormatException e) {
                 errMsg2.setText("Deben ser enteros");
@@ -425,8 +449,23 @@ public class DateInputPane extends javax.swing.JPanel {
             }
         }
 
-        if(correcto) {
-            //TODO
+        if (correcto) {
+            try {
+                Connection con = conexion.getConexion();
+                PreparedStatement ps = con.prepareStatement("SELECT P.P_Cod Código, P_Nombre Nombre " +
+                        "FROM Platos AS P, Consumos AS C, Se_Consume AS SC " +
+                        "WHERE P.P_Cod=SC.P_Cod AND SC.C_Cod=C.C_Cod AND C_Fecha>=? AND C_Fecha<=?");
+
+                ps.setDate(1, Date.valueOf(fechaInicio));
+                ps.setDate(2, Date.valueOf(fechaFin));
+
+                ResultSet rs = ps.executeQuery();
+
+                changePane(new QueryTablePane(Tabla.resultToTable(rs),
+                        "Platos consumidos entre " + fechaInicio + " y " + fechaFin));
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
         }
     }
 

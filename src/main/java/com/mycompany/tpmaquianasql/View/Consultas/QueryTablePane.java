@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.mycompany.tpmaquianasql.View.Tablas;
+package com.mycompany.tpmaquianasql.View.Consultas;
 
 import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
@@ -17,9 +17,11 @@ public class QueryTablePane extends javax.swing.JPanel {
     /**
      * Creates new form QueryTablePane
      */
-    public QueryTablePane(DefaultTableModel defaultTableModel) {
+    public QueryTablePane(DefaultTableModel defaultTableModel, String titulo) {
         initComponents();
         
+        tituloLabel.setText(titulo);
+
         table.setModel(defaultTableModel);
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setOpaque(false);
@@ -38,7 +40,9 @@ public class QueryTablePane extends javax.swing.JPanel {
 
         tableSPane = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        tituloLabel = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tableSPane.setForeground(new java.awt.Color(31, 115, 202));
@@ -62,12 +66,19 @@ public class QueryTablePane extends javax.swing.JPanel {
         table.setShowVerticalLines(false);
         tableSPane.setViewportView(table);
 
-        add(tableSPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(-7, 0, 550, 520));
+        add(tableSPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 540, 430));
+
+        tituloLabel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        tituloLabel.setForeground(new java.awt.Color(0, 0, 0));
+        tituloLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tituloLabel.setText("Titulo");
+        add(tituloLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable table;
     private javax.swing.JScrollPane tableSPane;
+    private javax.swing.JLabel tituloLabel;
     // End of variables declaration//GEN-END:variables
 }
