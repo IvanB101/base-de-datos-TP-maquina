@@ -27,7 +27,7 @@ public class ConsumosData {
         try {
             con = conexion.getConexion();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
 
@@ -43,38 +43,50 @@ public class ConsumosData {
 
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
 
         return true;
     }
 
-    public boolean deleteConsumo(int C_Cod) {
+    public boolean deleteConsumo(int codigo) {
+        PreparedStatement ps;
+
+        // Control existencia del consumo con código a eliminar
         try {
-            PreparedStatement ps = con.prepareStatement("DELETE FROM Consumos WHERE C_Cod = ?");
+            ps = con.prepareStatement("SELECT * FROM Consumos WHERE C_Cod=?");
+            ps.setInt(1, codigo);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            rs.getString(1);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "No hay ningún consumo cargado con el código: " + codigo);
+        }
 
-            ps.setInt(1, C_Cod);
-
+        try {
+            ps = con.prepareStatement("DELETE FROM Consumos WHERE C_Cod = ?");
+            ps.setInt(1, codigo);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null,
+                    "El consumo np puede ser eliminado porque está referenciado en Se_Consume");
             return false;
         }
 
         return true;
     }
-    
+
     public DefaultTableModel getConsumosTable() {
         try {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM Consumos");
             ResultSet rs = ps.executeQuery();
-            
+
             return Tabla.resultToTable(rs);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
-        
+
         return null;
     }
 }

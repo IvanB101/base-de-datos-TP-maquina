@@ -24,7 +24,7 @@ public class Se_ConsumeData {
         try {
             con = conexion.getConexion();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, "Error de conexion");
         }
     }
 
@@ -38,7 +38,7 @@ public class Se_ConsumeData {
 
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
 
@@ -46,31 +46,45 @@ public class Se_ConsumeData {
     }
 
     public boolean deleteConsumo(int C_Cod, int P_Cod) {
-        try {
-            PreparedStatement ps = con.prepareStatement("DELETE FROM Se_Consume WHERE C_Cod = ? AND P_Cod = ?");
+        PreparedStatement ps;
 
+        // Control existencia de la mesa con código a eliminar
+        try {
+            ps = con.prepareStatement("SELECT * FROM Se_Consume WHERE C_Cod = ? AND P_Cod = ?");
             ps.setInt(1, C_Cod);
             ps.setInt(2, P_Cod);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            rs.getString(1);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                    "No hay ninguna relación Se_Consume para el plato: " + P_Cod + " y el consumo: " + C_Cod);
+        }
 
+        try {
+            ps = con.prepareStatement("DELETE FROM Se_Consume WHERE C_Cod = ? AND P_Cod = ?");
+            ps.setInt(1, C_Cod);
+            ps.setInt(2, P_Cod);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null,
+                    "El plato no puede ser elimiando porque hay una referencia al mismo");
             return false;
         }
 
         return true;
     }
-    
+
     public DefaultTableModel getSeConsumeTable() {
         try {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM Se_Consume");
             ResultSet rs = ps.executeQuery();
-            
+
             return Tabla.resultToTable(rs);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
-        
+
         return null;
     }
 }

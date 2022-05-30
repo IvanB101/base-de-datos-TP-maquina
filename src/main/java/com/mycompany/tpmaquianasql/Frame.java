@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,7 +26,6 @@ import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -107,19 +105,13 @@ public class Frame extends javax.swing.JFrame {
             br.close();
 
             // Eliminacion el archivo con las instrucciones para que no se vuelva a ejecutar
-            // file.delete(); //TODO sacar comentario
+            file.delete();
         } catch (FileNotFoundException e) {
             // Este control es realizado antes del try
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Ha ocurrido un error con la lectura del archivo");
         } catch (SQLException e) {
-            switch (e.getErrorCode()) {
-                default:
-                    JOptionPane.showMessageDialog(null,
-                            "Error SQL, codigo: " + e.getErrorCode() + "Excepcion: " + e.getMessage());
-            }
-        } finally {
-            JOptionPane.showMessageDialog(null, "Se han realizado las instrucciones de la primera ejecucion con éxito");
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 

@@ -39,22 +39,33 @@ public class MesasData {
 
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
 
         return true;
     }
 
-    public boolean deleteMesa(int Me_Cod) {
+    public boolean deleteMesa(int codigo) {
+        PreparedStatement ps;
+
+        // Control existencia de la mesa con código a eliminar
         try {
-            PreparedStatement ps = con.prepareStatement("DELETE FROM Mesas WHERE Me_Cod = ?");
+            ps = con.prepareStatement("SELECT * FROM Mesas WHERE Me_Cod=?");
+            ps.setInt(1, codigo);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            rs.getString(1);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "No hay ninguna mesa cargada con el código: " + codigo);
+        }
 
-            ps.setInt(1, Me_Cod);
-
+        try {
+            ps = con.prepareStatement("DELETE FROM Mesas WHERE Me_Cod = ?");
+            ps.setInt(1, codigo);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
 
@@ -68,7 +79,7 @@ public class MesasData {
 
             return Tabla.resultToTable(rs);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
 
         return null;

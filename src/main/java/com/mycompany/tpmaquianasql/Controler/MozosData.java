@@ -40,38 +40,50 @@ public class MozosData {
 
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
 
         return true;
     }
 
-    public boolean deleteMozo(int Mo_Cod) {
+    public boolean deleteMozo(int codigo) {
+        PreparedStatement ps;
+
+        // Control existencia del mozo con código a eliminar
         try {
-            PreparedStatement ps = con.prepareStatement("DELETE FROM Mozos WHERE Mo_Cod = ?");
+            ps = con.prepareStatement("SELECT * FROM Mozos WHERE Mo_Cod=?");
+            ps.setInt(1, codigo);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            rs.getString(1);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "No hay ningún mozo cargado con el código: " + codigo);
+        }
 
-            ps.setInt(1, Mo_Cod);
-
+        try {
+            ps = con.prepareStatement("DELETE FROM Mozos WHERE Mo_Cod = ?");
+            ps.setInt(1, codigo);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null,
+                    "El mozo no puede ser elimiando porque tiene 1 o más mesas asignadas");
             return false;
         }
 
         return true;
     }
-    
+
     public DefaultTableModel getMozosTable() {
         try {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM Mozos");
             ResultSet rs = ps.executeQuery();
-            
+
             return Tabla.resultToTable(rs);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
-        
+
         return null;
     }
 }
