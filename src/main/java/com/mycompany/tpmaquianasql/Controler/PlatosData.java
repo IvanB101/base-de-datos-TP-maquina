@@ -44,38 +44,50 @@ public class PlatosData {
 
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
 
         return true;
     }
 
-    public boolean deletePlato(int P_Cod) {
+    public boolean deletePlato(int codigo) {
+        PreparedStatement ps;
+
+        // Control existencia de la mesa con código a eliminar
         try {
-            PreparedStatement ps = con.prepareStatement("DELETE FROM Platos WHERE P_Cod = ?");
+            ps = con.prepareStatement("SELECT * FROM Platos WHERE P_Cod=?");
+            ps.setInt(1, codigo);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            rs.getString(1);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "No hay ningún plato cargado con el código: " + codigo);
+        }
 
-            ps.setInt(1, P_Cod);
-
+        try {
+            ps = con.prepareStatement("DELETE FROM Platos WHERE P_Cod = ?");
+            ps.setInt(1, codigo);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null,
+                    "El plato no puede ser elimiando porque hay una referencia al mismo");
             return false;
         }
 
         return true;
     }
-    
+
     public DefaultTableModel getPlatosTable() {
         try {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM Platos");
             ResultSet rs = ps.executeQuery();
-            
+
             return Tabla.resultToTable(rs);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
-        
+
         return null;
     }
 }

@@ -55,7 +55,7 @@ public class MozoPane extends javax.swing.JPanel {
         codigoErrMsg.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         codigoErrMsg.setForeground(new java.awt.Color(255, 0, 0));
         codigoErrMsg.setText("Mensaje de error");
-        jPanel1.add(codigoErrMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 130, 190, -1));
+        jPanel1.add(codigoErrMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 70, 190, -1));
 
         codigoField.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         codigoField.setForeground(new java.awt.Color(190, 190, 190));
@@ -75,12 +75,12 @@ public class MozoPane extends javax.swing.JPanel {
                 codigoFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(codigoField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 380, -1));
+        jPanel1.add(codigoField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 380, -1));
 
         codigoLable.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         codigoLable.setForeground(new java.awt.Color(0, 0, 0));
         codigoLable.setText("Código");
-        jPanel1.add(codigoLable, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
+        jPanel1.add(codigoLable, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
 
         deleteButtonP.setBackground(new java.awt.Color(18, 33, 69));
         deleteButtonP.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -119,7 +119,7 @@ public class MozoPane extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jPanel1.add(deleteButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 90, -1));
+        jPanel1.add(deleteButtonP, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 90, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
